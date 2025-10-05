@@ -6,12 +6,7 @@ import 'custom_text_field.dart';
 import 'custom_dropdown.dart';
 
 class CreateAppointmentDialog extends StatefulWidget {
-  final String userId;
-
-  const CreateAppointmentDialog({
-    super.key,
-    required this.userId,
-  });
+  const CreateAppointmentDialog({super.key});
 
   @override
   State<CreateAppointmentDialog> createState() => _CreateAppointmentDialogState();
@@ -97,7 +92,7 @@ class _CreateAppointmentDialogState extends State<CreateAppointmentDialog> {
       status: _status,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
-      userId: widget.userId,
+      userId: 'local-user',
     );
 
     Navigator.of(context).pop(appointment);

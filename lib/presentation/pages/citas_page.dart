@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../blocs/appointment_bloc.dart';
 import '../../blocs/appointment_event.dart';
 import '../../blocs/appointment_state.dart';
@@ -38,11 +38,27 @@ class _CitasPageState extends State<CitasPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AppointmentBloc(
-        AppointmentRepository(Supabase.instance.client),
-      )..add(LoadAppointments()),
-      child: Scaffold(
+    return FutureBuilder<SharedPreferences>(
+      future: SharedPreferences.getInstance(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        return BlocProvider(
+          create: (context) => AppointmentBloc(
+            AppointmentRepository(snapshot.data!),
+          )..add(LoadAppointments()),
+          child: _buildContent(),
+        );
+      },
+    );
+  }
+
+  Widget _buildContent() {
+    return Scaffold(
         backgroundColor: const Color(0xFFF9FAFB),
         body: BlocConsumer<AppointmentBloc, AppointmentState>(
           listener: (context, state) {
@@ -495,12 +511,9 @@ class _CitasPageState extends State<CitasPage> {
   }
 
   void _createAppointment(BuildContext context) async {
-    final userId = Supabase.instance.client.auth.currentUser?.id;
-    if (userId == null) return;
-
     final result = await showDialog<AppointmentModel>(
       context: context,
-      builder: (dialogContext) => CreateAppointmentDialog(userId: userId),
+      builder: (dialogContext) => const CreateAppointmentDialog(),
     );
 
     if (result != null && context.mounted) {

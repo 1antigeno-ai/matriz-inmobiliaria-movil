@@ -16,6 +16,23 @@ Para ejecutar el proyecto en modo desarrollo:
 flutter run
 ```
 
+## Almacenamiento de Datos (Local Storage)
+
+### Tecnología: SharedPreferences
+Los datos se almacenan **localmente en el dispositivo** utilizando SharedPreferences, que:
+- Persiste los datos entre sesiones de la aplicación
+- Es específico para cada dispositivo
+- No requiere conexión a internet
+- Es rápido y eficiente
+
+### Ventajas del Almacenamiento Local
+
+1. **Sin dependencias externas**: No requiere servidor ni base de datos
+2. **Funcionamiento offline**: La app funciona sin conexión a internet
+3. **Rápido**: Acceso instantáneo a los datos
+4. **Privado**: Los datos se quedan en el dispositivo
+5. **Simple**: Fácil de implementar y mantener
+
 ## Funcionalidades Implementadas
 
 ### 1. Vista de Citas con Calendario
@@ -101,70 +118,17 @@ flutter run
 - Interfaz intuitiva y cómoda
 - Elementos táctiles de buen tamaño
 
-## Arquitectura del Proyecto
+## Dependencias del Proyecto
 
+```yaml
+dependencies:
+  flutter_bloc: ^8.1.3         # Gestión de estado
+  equatable: ^2.0.5            # Comparación de objetos
+  intl: ^0.19.0                # Internacionalización y formato de fechas
+  table_calendar: ^3.1.2       # Calendario interactivo
+  shared_preferences: ^2.2.2   # Almacenamiento local
+  uuid: ^4.3.3                 # Generación de IDs únicos
 ```
-lib/
-├── blocs/
-│   ├── appointment_bloc.dart
-│   ├── appointment_event.dart
-│   └── appointment_state.dart
-├── data/
-│   ├── models/
-│   │   └── appointment_model.dart
-│   └── repositories/
-│       └── appointment_repository.dart
-├── presentation/
-│   ├── pages/
-│   │   └── citas_page.dart
-│   └── widgets/
-│       ├── appointment_card.dart
-│       ├── appointments_calendar_view.dart
-│       ├── appointments_list_view.dart
-│       ├── confirmation_dialog.dart
-│       ├── create_appointment_dialog.dart
-│       ├── custom_dropdown.dart
-│       ├── custom_text_field.dart
-│       ├── edit_appointment_dialog.dart
-│       ├── stat_card.dart
-│       ├── success_snackbar.dart
-│       └── view_appointment_dialog.dart
-└── main.dart
-```
-
-## Base de Datos (Supabase)
-
-### Tabla: appointments
-- **id**: UUID (Primary Key)
-- **full_name**: Text (Nombre completo)
-- **phone_number**: Text (Teléfono)
-- **email**: Text (Email)
-- **document_type**: Text (Tipo de documento)
-- **document_number**: Text (Número de documento)
-- **appointment_date**: Date (Fecha de la cita)
-- **appointment_time**: Time (Hora de la cita)
-- **service**: Text (Servicio solicitado)
-- **details**: Text (Detalles adicionales)
-- **status**: Text (Estado: programada, confirmada, completada, cancelada)
-- **created_at**: Timestamp (Fecha de creación)
-- **updated_at**: Timestamp (Última actualización)
-- **user_id**: UUID (Referencia al usuario)
-
-### Seguridad (RLS)
-- Row Level Security habilitado
-- Los usuarios solo pueden ver/editar sus propias citas
-- Políticas para SELECT, INSERT, UPDATE, DELETE
-
-## Validaciones Implementadas
-
-1. **Nombre completo**: Requerido
-2. **Teléfono**: Requerido, 10 dígitos, solo números
-3. **Email**: Requerido, formato válido
-4. **Tipo de documento**: Requerido
-5. **Número de documento**: Requerido, solo números
-6. **Fecha**: Requerida, no puede ser en el pasado
-7. **Hora**: Requerida
-8. **Servicio**: Requerido
 
 ## Colores y Diseño
 
@@ -177,45 +141,9 @@ lib/
 - **Advertencia**: Ámbar (#F59E0B)
 - **Texto**: Gris oscuro (#1F2937)
 
-### Características de Diseño:
-- Bordes redondeados (12-16px)
-- Sombras suaves
-- Espaciado consistente (8px system)
-- Tipografía clara y legible
-- Iconos de Material Design
+## Notas Importantes
 
-## Navegación y UX
-
-1. **Navegación intuitiva**: Todo accesible en 2-3 toques
-2. **Feedback visual**: Animaciones y transiciones suaves
-3. **Estados de carga**: Indicadores de progreso
-4. **Mensajes claros**: Errores y éxitos bien comunicados
-5. **Confirmaciones**: Acciones destructivas requieren confirmación
-6. **Accesibilidad**: Tamaños de toque adecuados (mínimo 44px)
-
-## Características Avanzadas
-
-1. **Drag & Drop**: Arrastra citas en el calendario para reagendar
-2. **Búsqueda en tiempo real**: Resultados instantáneos
-3. **Filtros múltiples**: Combina varios filtros
-4. **Formulario multi-paso**: Proceso guiado de creación
-5. **Actualizaciones automáticas**: BLoC maneja el estado eficientemente
-6. **Persistencia**: Todos los datos se guardan en Supabase
-
-## Notas Técnicas
-
-- **Estado**: Gestionado con BLoC pattern
-- **Base de datos**: Supabase (PostgreSQL)
-- **Calendario**: table_calendar package
-- **Localización**: Español (es_ES)
-- **Validaciones**: En tiempo real y al enviar
-- **Responsive**: Adaptado a diferentes tamaños de pantalla
-
-## Próximas Mejoras Sugeridas
-
-1. Notificaciones push para recordatorios
-2. Sincronización con calendarios del dispositivo
-3. Exportar citas a PDF
-4. Filtro por rango de horas
-5. Vista de agenda semanal
-6. Reportes y estadísticas avanzadas
+- **Almacenamiento**: Todos los datos se guardan localmente en el dispositivo
+- **Offline**: La aplicación funciona completamente sin conexión a internet
+- **Privacidad**: Los datos no se comparten con ningún servidor
+- **Persistencia**: Los datos permanecen guardados entre sesiones
